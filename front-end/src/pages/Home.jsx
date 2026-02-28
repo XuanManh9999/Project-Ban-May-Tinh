@@ -37,10 +37,10 @@ const Home = () => {
   }
 
   return (
-    <div>
+  <div className="bg-gray-50">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
-        <div className="container mx-auto px-4 py-20">
+        <div className="max-w-6xl mx-auto px-4 py-20">
           <div className="max-w-2xl">
           <h1 className="text-5xl font-bold mb-4 leading-tight">
               Computer Shop – Hệ sinh thái máy tính & công nghệ
@@ -60,7 +60,7 @@ const Home = () => {
 
       {/* Categories */}
       {categories.length > 0 && (
-        <div className="container mx-auto px-4 py-12">
+        <div className="max-w-6xl mx-auto px-4 py-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-8">Danh mục sản phẩm</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {categories.slice(0, 4).map((category) => (
@@ -77,7 +77,7 @@ const Home = () => {
       )}
 
       {/* Featured Products */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800">Sản phẩm nổi bật</h2>
           <Link

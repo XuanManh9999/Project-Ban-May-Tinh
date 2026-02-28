@@ -126,7 +126,7 @@ const ForgotPassword = () => {
                 required
               />
               <p className="text-sm text-gray-500 mt-1">
-                Kiểm tra email hoặc console log (dev mode) để lấy mã
+                Mã OTP đã được gửi đến email của bạn. Kiểm tra hộp thư đến và thư mục spam.
               </p>
             </div>
 

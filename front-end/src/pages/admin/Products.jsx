@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { productAPI, categoryAPI } from '../../services/api';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { formatVND } from '../../utils/format';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -133,7 +134,7 @@ const Products = () => {
                 <td className="px-6 py-4">{product.id}</td>
                 <td className="px-6 py-4 font-medium">{product.name}</td>
                 <td className="px-6 py-4">{product.categoryName}</td>
-                <td className="px-6 py-4">{product.price.toLocaleString()}đ</td>
+                <td className="px-6 py-4">{formatVND(product.price)}</td>
                 <td className="px-6 py-4">{product.stockQuantity}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 rounded text-xs ${product.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>

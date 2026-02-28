@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,15 +16,6 @@ public class ProductResponse {
     private Long id;
     private String name;
     private String description;
-
-    // Thông số cấu hình
-    private String cpu;
-    private String ram;
-    private String storage;
-    private String gpu;
-    private String screenSize;
-    private String color;
-
     private BigDecimal price;
     private Integer stockQuantity;
     private String imageUrl;
@@ -31,5 +24,15 @@ public class ProductResponse {
     private Boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-}
 
+    private List<AttributeEntry> attributes = new ArrayList<>();
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AttributeEntry {
+        private Long id;
+        private String name;
+        private String value;
+    }
+}

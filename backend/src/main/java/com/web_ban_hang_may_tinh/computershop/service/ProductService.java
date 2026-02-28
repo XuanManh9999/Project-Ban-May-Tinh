@@ -6,6 +6,7 @@ import com.web_ban_hang_may_tinh.computershop.dto.product.ProductResponse;
 import com.web_ban_hang_may_tinh.computershop.dto.product.ProductSearchRequest;
 import com.web_ban_hang_may_tinh.computershop.entity.Category;
 import com.web_ban_hang_may_tinh.computershop.entity.Product;
+import com.web_ban_hang_may_tinh.computershop.entity.ProductAttribute;
 import com.web_ban_hang_may_tinh.computershop.exception.ResourceNotFoundException;
 import com.web_ban_hang_may_tinh.computershop.repository.CategoryRepository;
 import com.web_ban_hang_may_tinh.computershop.repository.ProductRepository;
@@ -37,17 +38,13 @@ public class ProductService {
         Product product = new Product();
         product.setName(request.getName());
         product.setDescription(request.getDescription());
-        product.setCpu(request.getCpu());
-        product.setRam(request.getRam());
-        product.setStorage(request.getStorage());
-        product.setGpu(request.getGpu());
-        product.setScreenSize(request.getScreenSize());
-        product.setColor(request.getColor());
         product.setPrice(request.getPrice());
         product.setStockQuantity(request.getStockQuantity());
         product.setImageUrl(request.getImageUrl());
         product.setCategory(category);
         product.setActive(request.getActive());
+
+        syncAttributes(product, request.getAttributes());
 
         Product savedProduct = productRepository.save(product);
         return mapToResponse(savedProduct);
@@ -63,20 +60,31 @@ public class ProductService {
 
         product.setName(request.getName());
         product.setDescription(request.getDescription());
-        product.setCpu(request.getCpu());
-        product.setRam(request.getRam());
-        product.setStorage(request.getStorage());
-        product.setGpu(request.getGpu());
-        product.setScreenSize(request.getScreenSize());
-        product.setColor(request.getColor());
         product.setPrice(request.getPrice());
         product.setStockQuantity(request.getStockQuantity());
         product.setImageUrl(request.getImageUrl());
         product.setCategory(category);
         product.setActive(request.getActive());
 
+        syncAttributes(product, request.getAttributes());
+
         Product updatedProduct = productRepository.save(product);
         return mapToResponse(updatedProduct);
+    }
+
+    private void syncAttributes(Product product, List<ProductRequest.AttributeEntry> entries) {
+        product.getAttributes().clear();
+        if (entries != null) {
+            for (ProductRequest.AttributeEntry entry : entries) {
+                if (StringUtils.hasText(entry.getName()) && StringUtils.hasText(entry.getValue())) {
+                    ProductAttribute attr = new ProductAttribute();
+                    attr.setAttributeName(entry.getName());
+                    attr.setAttributeValue(entry.getValue());
+                    attr.setProduct(product);
+                    product.getAttributes().add(attr);
+                }
+            }
+        }
     }
 
     @Transactional
@@ -99,11 +107,11 @@ public class ProductService {
     }
 
     public PageResponse<ProductResponse> searchProducts(ProductSearchRequest request, Long userId) {
-        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), 
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(),
                 Sort.by("createdAt").descending());
 
         Page<Product> productPage;
-        
+
         if (!StringUtils.hasText(request.getKeyword()) || request.getKeyword().trim().isEmpty()) {
             if (request.getCategoryId() != null) {
                 productPage = productRepository.findByCategoryIdAndActiveTrue(request.getCategoryId(), pageable);
@@ -112,14 +120,13 @@ public class ProductService {
             }
         } else {
             String keyword = request.getKeyword().trim();
-            
+
             if (request.getCategoryId() != null) {
                 productPage = productRepository.searchProductsByCategory(keyword, request.getCategoryId(), pageable);
             } else {
                 productPage = productRepository.searchProducts(keyword, pageable);
             }
-            
-            // Save search history
+
             if (userId != null) {
                 searchHistoryService.saveSearchHistory(userId, keyword, (int) productPage.getTotalElements());
             }
@@ -131,13 +138,13 @@ public class ProductService {
     public PageResponse<ProductResponse> getRelatedProducts(Long productId, int page, int size) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy sản phẩm"));
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Product> relatedProducts = productRepository.findRelatedProducts(
-                product.getCategory().getId(), 
-                productId, 
+                product.getCategory().getId(),
+                productId,
                 pageable);
-        
+
         return mapToPageResponse(relatedProducts);
     }
 
@@ -146,12 +153,6 @@ public class ProductService {
         response.setId(product.getId());
         response.setName(product.getName());
         response.setDescription(product.getDescription());
-        response.setCpu(product.getCpu());
-        response.setRam(product.getRam());
-        response.setStorage(product.getStorage());
-        response.setGpu(product.getGpu());
-        response.setScreenSize(product.getScreenSize());
-        response.setColor(product.getColor());
         response.setPrice(product.getPrice());
         response.setStockQuantity(product.getStockQuantity());
         response.setImageUrl(product.getImageUrl());
@@ -160,6 +161,12 @@ public class ProductService {
         response.setActive(product.getActive());
         response.setCreatedAt(product.getCreatedAt());
         response.setUpdatedAt(product.getUpdatedAt());
+
+        List<ProductResponse.AttributeEntry> attrs = product.getAttributes().stream()
+                .map(a -> new ProductResponse.AttributeEntry(a.getId(), a.getAttributeName(), a.getAttributeValue()))
+                .collect(Collectors.toList());
+        response.setAttributes(attrs);
+
         return response;
     }
 
@@ -178,4 +185,3 @@ public class ProductService {
         );
     }
 }
-

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { orderAPI } from '../services/api';
+import { formatVND } from '../utils/format';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -54,7 +55,8 @@ const Orders = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="bg-gray-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Đơn hàng của tôi</h1>
 
       {orders.length === 0 ? (
@@ -97,7 +99,7 @@ const Orders = () => {
                         {item.productName} x {item.quantity}
                       </span>
                       <span className="font-semibold">
-                        {item.subtotal.toLocaleString('vi-VN')}đ
+                        {formatVND(item.subtotal)}
                       </span>
                     </div>
                   ))}
@@ -110,7 +112,7 @@ const Orders = () => {
 
                 <div className="flex justify-between items-center pt-4 border-t">
                   <div className="text-lg font-bold text-primary-600">
-                    Tổng: {order.finalAmount.toLocaleString('vi-VN')}đ
+                    Tổng: {formatVND(order.finalAmount)}
                   </div>
                   <Link
                     to={`/orders/${order.id}`}
@@ -124,6 +126,7 @@ const Orders = () => {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 };

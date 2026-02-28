@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { orderAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import { formatVND } from '../utils/format';
 
 const OrderDetail = () => {
   const { id } = useParams();
@@ -49,7 +50,8 @@ const OrderDetail = () => {
   if (!order) return null;
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="bg-gray-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
       <button
         onClick={() => navigate('/orders')}
         className="mb-4 text-primary-600 hover:text-primary-700"
@@ -108,11 +110,11 @@ const OrderDetail = () => {
                 <div className="flex-1">
                   <h4 className="font-semibold text-gray-800">{item.productName}</h4>
                   <p className="text-gray-600">
-                    {item.price.toLocaleString('vi-VN')}đ x {item.quantity}
+                    {formatVND(item.price)} x {item.quantity}
                   </p>
                 </div>
                 <div className="text-right font-semibold">
-                  {item.subtotal.toLocaleString('vi-VN')}đ
+                  {formatVND(item.subtotal)}
                 </div>
               </div>
             ))}
@@ -125,19 +127,19 @@ const OrderDetail = () => {
             <div className="flex justify-between">
               <span className="text-gray-600">Tạm tính:</span>
               <span className="font-semibold">
-                {order.totalAmount.toLocaleString('vi-VN')}đ
+                {formatVND(order.totalAmount)}
               </span>
             </div>
             {order.discountAmount > 0 && (
               <div className="flex justify-between text-green-600">
                 <span>Giảm giá:</span>
-                <span>-{order.discountAmount.toLocaleString('vi-VN')}đ</span>
+                <span>-{formatVND(order.discountAmount)}</span>
               </div>
             )}
             <div className="flex justify-between text-xl font-bold pt-2 border-t">
               <span>Tổng cộng:</span>
               <span className="text-primary-600">
-                {order.finalAmount.toLocaleString('vi-VN')}đ
+                {formatVND(order.finalAmount)}
               </span>
             </div>
           </div>
@@ -149,6 +151,7 @@ const OrderDetail = () => {
             <p className="text-gray-600">{order.note}</p>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

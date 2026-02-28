@@ -196,17 +196,19 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="bg-gray-50 py-8">
+        <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">Thông tin cá nhân</h1>
 
         {/* Profile Information */}

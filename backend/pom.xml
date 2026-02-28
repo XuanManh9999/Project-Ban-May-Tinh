@@ -51,6 +51,12 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
+		<!-- Spring Mail (gửi OTP qua email) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 		<!-- Database: SQL Server -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>

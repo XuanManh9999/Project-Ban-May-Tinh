@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { paymentAPI } from '../services/api';
 import { toast } from 'react-toastify';
@@ -9,9 +9,14 @@ const PaymentReturn = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState('processing'); // processing, success, failed
   const [orderNumber, setOrderNumber] = useState('');
+  const hasVerifiedRef = useRef(false);
 
   useEffect(() => {
-    verifyPayment();
+    // Tránh chạy trùng trong React StrictMode (dev)
+    if (!hasVerifiedRef.current) {
+      hasVerifiedRef.current = true;
+      verifyPayment();
+    }
   }, []);
 
   const verifyPayment = async () => {
@@ -47,8 +52,8 @@ const PaymentReturn = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
+    <div className="bg-gray-50 py-16">
+      <div className="max-w-md mx-auto px-4 bg-white rounded-lg shadow-lg p-8 text-center">
         {status === 'processing' && (
           <>
             <FaSpinner className="text-6xl text-blue-500 mx-auto mb-4 animate-spin" />

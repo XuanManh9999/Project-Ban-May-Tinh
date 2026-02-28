@@ -13,6 +13,7 @@ import com.web_ban_hang_may_tinh.computershop.exception.ResourceNotFoundExceptio
 import com.web_ban_hang_may_tinh.computershop.repository.CartRepository;
 import com.web_ban_hang_may_tinh.computershop.repository.PasswordResetTokenRepository;
 import com.web_ban_hang_may_tinh.computershop.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import com.web_ban_hang_may_tinh.computershop.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +38,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final EmailService emailService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -124,12 +126,13 @@ public class AuthService {
 
         passwordResetTokenRepository.save(resetToken);
 
-        // TODO: Send email with reset code
-        // For development, we'll just log it or return it
-        System.out.println("========================================");
-        System.out.println("Password Reset Code for " + request.getEmail() + ": " + resetCode);
-        System.out.println("Code expires in 15 minutes");
-        System.out.println("========================================");
+        try {
+            emailService.sendPasswordResetOtp(request.getEmail(), resetCode);
+        } catch (MessagingException e) {
+            throw new BadRequestException("Không thể gửi email xác thực. Vui lòng kiểm tra lại địa chỉ email hoặc thử lại sau.");
+        } catch (IllegalStateException e) {
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
     @Transactional

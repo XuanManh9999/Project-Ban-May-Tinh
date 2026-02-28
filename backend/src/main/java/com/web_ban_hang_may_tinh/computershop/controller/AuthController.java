@@ -35,7 +35,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         authService.forgotPassword(request);
         return ResponseEntity.ok(ApiResponse.success(
-                "Mã xác thực đã được gửi đến email của bạn. Vui lòng kiểm tra (hoặc xem console trong môi trường dev)", 
+                "Mã xác thực đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư (và thư mục spam).", 
                 null));
     }
 

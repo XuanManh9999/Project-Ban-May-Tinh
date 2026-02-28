@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { orderAPI, paymentAPI, promotionAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import AddressForm from '../components/AddressForm';
+import { formatVND, formatDiscount } from '../utils/format';
 
 const Checkout = () => {
   const { cart, clearCart } = useCart();
@@ -117,14 +118,17 @@ const Checkout = () => {
 
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Giỏ hàng trống</h2>
+      <div className="bg-gray-50 py-12">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Giỏ hàng trống</h2>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="bg-gray-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Thanh toán</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -203,7 +207,7 @@ const Checkout = () => {
                     {item.productName} x {item.quantity}
                   </span>
                   <span className="font-semibold">
-                    {item.subtotal.toLocaleString('vi-VN')}đ
+                    {formatVND(item.subtotal)}
                   </span>
                 </div>
               ))}
@@ -242,19 +246,19 @@ const Checkout = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Tạm tính:</span>
                 <span className="font-semibold">
-                  {cart.totalAmount.toLocaleString('vi-VN')}đ
+                  {formatVND(cart.totalAmount)}
                 </span>
               </div>
               {promotion && (
                 <div className="flex justify-between text-green-600">
                   <span>Giảm giá:</span>
-                  <span>-{calculateDiscount().toLocaleString('vi-VN')}đ</span>
+                  <span>-{formatVND(calculateDiscount())}</span>
                 </div>
               )}
               <div className="flex justify-between text-lg font-bold pt-2 border-t">
                 <span>Tổng cộng:</span>
                 <span className="text-primary-600">
-                  {finalAmount.toLocaleString('vi-VN')}đ
+                  {formatVND(finalAmount)}
                 </span>
               </div>
             </div>
@@ -268,6 +272,7 @@ const Checkout = () => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

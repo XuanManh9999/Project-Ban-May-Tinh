@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaTachometerAlt, FaBox, FaShoppingCart, FaTags, FaList, FaStore } from 'react-icons/fa';
+import { FaTachometerAlt, FaBox, FaShoppingCart, FaTags, FaList, FaStore, FaChartLine } from 'react-icons/fa';
 
 const AdminLayout = ({ title, children }) => {
   const location = useLocation();
@@ -11,6 +11,7 @@ const AdminLayout = ({ title, children }) => {
     { to: '/admin/orders', label: 'Đơn hàng', icon: FaShoppingCart },
     { to: '/admin/promotions', label: 'Khuyến mãi', icon: FaTags },
     { to: '/admin/categories', label: 'Danh mục', icon: FaList },
+    { to: '/admin/reports', label: 'Báo cáo', icon: FaChartLine },
   ];
 
   return (

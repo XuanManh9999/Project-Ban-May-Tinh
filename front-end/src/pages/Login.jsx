@@ -30,7 +30,11 @@ const Login = () => {
 
       if (result.success) {
         toast.success('Đăng nhập thành công!');
-        navigate('/');
+        if (result.user?.role === 'ADMIN') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       } else {
         toast.error(result.message);
         setError(result.message);

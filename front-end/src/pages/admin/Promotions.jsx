@@ -4,6 +4,7 @@ import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Pagination from '../../components/admin/Pagination';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { formatVND, formatDiscount } from '../../utils/format';
 
 const Promotions = () => {
   const [promotions, setPromotions] = useState([]);
@@ -158,14 +159,13 @@ const Promotions = () => {
                 <td className="px-6 py-4 font-medium">{promo.code}</td>
                 <td className="px-6 py-4">{promo.name}</td>
                 <td className="px-6 py-4">
-                  {promo.discountValue}{promo.discountType === 'PERCENTAGE' ? '%' : 'đ'}
+                  {formatDiscount(promo)}
                 </td>
                 <td className="px-6 py-4 text-sm">
-                  {new Date(promo.startDate).toLocaleDateString('vi-VN')} -<br />
-                  {new Date(promo.endDate).toLocaleDateString('vi-VN')}
+                  {new Date(promo.startDate).toLocaleDateString('vi-VN')} – {new Date(promo.endDate).toLocaleDateString('vi-VN')}
                 </td>
                 <td className="px-6 py-4">
-                  {promo.usedCount}/{promo.usageLimit || '∞'}
+                  {promo.usedCount} / {promo.usageLimit > 0 ? promo.usageLimit.toLocaleString('vi-VN') : 'Không giới hạn'}
                 </td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 rounded text-xs ${promo.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>

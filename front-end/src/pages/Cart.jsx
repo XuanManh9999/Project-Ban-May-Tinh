@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { formatVND } from '../utils/format';
 
 const Cart = () => {
   const { cart, updateCartItem, removeFromCart, loading } = useCart();
@@ -39,20 +40,23 @@ const Cart = () => {
 
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Giỏ hàng trống</h2>
-        <Link
-          to="/products"
-          className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
-        >
-          Tiếp tục mua sắm
-        </Link>
+      <div className="bg-gray-50 py-12">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Giỏ hàng trống</h2>
+          <Link
+            to="/products"
+            className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
+          >
+            Tiếp tục mua sắm
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="bg-gray-50 py-12">
+      <div className="max-w-6xl mx-auto px-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Giỏ hàng</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -73,7 +77,7 @@ const Cart = () => {
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-800">{item.productName}</h3>
                   <p className="text-primary-600 font-semibold">
-                    {item.price.toLocaleString('vi-VN')}đ
+                    {formatVND(item.price)}
                   </p>
                   <p className="text-sm text-gray-500">
                     Còn {item.stockQuantity} sản phẩm
@@ -103,7 +107,7 @@ const Cart = () => {
                 {/* Subtotal */}
                 <div className="text-right">
                   <p className="font-semibold text-gray-800">
-                    {item.subtotal.toLocaleString('vi-VN')}đ
+                    {formatVND(item.subtotal)}
                   </p>
                 </div>
 
@@ -133,7 +137,7 @@ const Cart = () => {
               <div className="flex justify-between text-lg font-bold">
                 <span>Tổng cộng:</span>
                 <span className="text-primary-600">
-                  {cart.totalAmount.toLocaleString('vi-VN')}đ
+                  {formatVND(cart.totalAmount)}
                 </span>
               </div>
             </div>
@@ -154,6 +158,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

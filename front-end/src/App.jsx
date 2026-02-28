@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { ToastContainer } from 'react-toastify'
@@ -23,89 +23,104 @@ import AdminProducts from './pages/admin/ProductsEnhanced'
 import AdminOrders from './pages/admin/Orders'
 import AdminPromotions from './pages/admin/Promotions'
 import AdminCategories from './pages/admin/Categories'
+import AdminReports from './pages/admin/Reports'
 import PrivateRoute from './components/PrivateRoute'
 import AdminRoute from './components/AdminRoute'
+
+function AppContent() {
+  const location = useLocation()
+  const isAdminRoute = location.pathname.startsWith('/admin')
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      {!isAdminRoute && <Header />}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+          
+          {/* Protected Routes */}
+          <Route path="/cart" element={
+            <PrivateRoute>
+              <Cart />
+            </PrivateRoute>
+          } />
+          <Route path="/checkout" element={
+            <PrivateRoute>
+              <Checkout />
+            </PrivateRoute>
+          } />
+          <Route path="/orders" element={
+            <PrivateRoute>
+              <Orders />
+            </PrivateRoute>
+          } />
+          <Route path="/orders/:id" element={
+            <PrivateRoute>
+              <OrderDetail />
+            </PrivateRoute>
+          } />
+          <Route path="/payment/return" element={
+            <PrivateRoute>
+              <PaymentReturn />
+            </PrivateRoute>
+          } />
+          <Route path="/profile" element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          } />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          } />
+          <Route path="/admin/products" element={
+            <AdminRoute>
+              <AdminProducts />
+            </AdminRoute>
+          } />
+          <Route path="/admin/orders" element={
+            <AdminRoute>
+              <AdminOrders />
+            </AdminRoute>
+          } />
+          <Route path="/admin/promotions" element={
+            <AdminRoute>
+              <AdminPromotions />
+            </AdminRoute>
+          } />
+          <Route path="/admin/categories" element={
+            <AdminRoute>
+              <AdminCategories />
+            </AdminRoute>
+          } />
+          <Route path="/admin/reports" element={
+            <AdminRoute>
+              <AdminReports />
+            </AdminRoute>
+          } />
+          
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </main>
+      {!isAdminRoute && <Footer />}
+    </div>
+  )
+}
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <Router>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
-                
-                {/* Protected Routes */}
-                <Route path="/cart" element={
-                  <PrivateRoute>
-                    <Cart />
-                  </PrivateRoute>
-                } />
-                <Route path="/checkout" element={
-                  <PrivateRoute>
-                    <Checkout />
-                  </PrivateRoute>
-                } />
-                <Route path="/orders" element={
-                  <PrivateRoute>
-                    <Orders />
-                  </PrivateRoute>
-                } />
-                <Route path="/orders/:id" element={
-                  <PrivateRoute>
-                    <OrderDetail />
-                  </PrivateRoute>
-                } />
-                <Route path="/payment/return" element={
-                  <PrivateRoute>
-                    <PaymentReturn />
-                  </PrivateRoute>
-                } />
-                <Route path="/profile" element={
-                  <PrivateRoute>
-                    <Profile />
-                  </PrivateRoute>
-                } />
-                
-                {/* Admin Routes */}
-                <Route path="/admin" element={
-                  <AdminRoute>
-                    <AdminDashboard />
-                  </AdminRoute>
-                } />
-                <Route path="/admin/products" element={
-                  <AdminRoute>
-                    <AdminProducts />
-                  </AdminRoute>
-                } />
-                <Route path="/admin/orders" element={
-                  <AdminRoute>
-                    <AdminOrders />
-                  </AdminRoute>
-                } />
-                <Route path="/admin/promotions" element={
-                  <AdminRoute>
-                    <AdminPromotions />
-                  </AdminRoute>
-                } />
-                <Route path="/admin/categories" element={
-                  <AdminRoute>
-                    <AdminCategories />
-                  </AdminRoute>
-                } />
-                
-                <Route path="*" element={<Navigate to="/" />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+          <AppContent />
           <ToastContainer
             position="top-right"
             autoClose={3000}

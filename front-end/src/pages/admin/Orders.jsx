@@ -3,6 +3,7 @@ import { orderAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import Pagination from '../../components/admin/Pagination';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { formatVND } from '../../utils/format';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -148,7 +149,7 @@ const Orders = () => {
               <tr key={order.id}>
                 <td className="px-6 py-4 font-medium">{order.orderNumber}</td>
                 <td className="px-6 py-4">{order.userName}</td>
-                <td className="px-6 py-4">{order.finalAmount.toLocaleString()}đ</td>
+                <td className="px-6 py-4">{formatVND(order.finalAmount)}</td>
                 <td className="px-6 py-4">
                   <span className={`px-2 py-1 rounded text-xs ${
                     order.paymentStatus === 'PAID' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
@@ -173,7 +174,7 @@ const Orders = () => {
                   {new Date(order.createdAt).toLocaleDateString('vi-VN')}
                 </td>
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>

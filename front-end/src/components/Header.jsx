@@ -51,8 +51,8 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-xl">
-      <div className="container mx-auto px-4">
+  <header className="bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-xl">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Logo variant="light" />
