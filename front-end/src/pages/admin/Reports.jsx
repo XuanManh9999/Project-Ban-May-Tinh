@@ -108,7 +108,7 @@ const Reports = () => {
     const catQty = {};
     orders.forEach(o => {
       if (o.paymentStatus !== 'PAID' && o.status !== 'DELIVERED') return;
-      (o.orderItems || []).forEach(item => {
+      (o.items || []).forEach(item => {
         const productId = item.productId;
         let catName = 'Khác';
         for (const [cn, ids] of Object.entries(catProductMap)) {
@@ -126,7 +126,7 @@ const Reports = () => {
     const productSales = {};
     orders.forEach(o => {
       if (o.paymentStatus !== 'PAID' && o.status !== 'DELIVERED') return;
-      (o.orderItems || []).forEach(item => {
+      (o.items || []).forEach(item => {
         const pid = item.productId || item.productName || 'N/A';
         if (!productSales[pid]) productSales[pid] = { name: item.productName || `SP #${pid}`, quantity: 0, revenue: 0 };
         productSales[pid].quantity += item.quantity || 0;
