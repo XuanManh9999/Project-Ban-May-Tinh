@@ -76,7 +76,7 @@ const ProductsEnhanced = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, pageSize, searchKeyword, selectedCategory]);
+  }, [currentPage, pageSize, searchKeyword, selectedCategory, filterActive]);
 
   useEffect(() => {
     fetchCategories();
